@@ -1,6 +1,6 @@
 import { Item } from './../shared/item';
 import { Component, OnInit } from '@angular/core';
-import { todos$, IObserver } from 'app/my-observable/app-data';
+import { IObserver, todosStore } from 'app/my-observable/app-data';
 
 @Component({
   selector: 'app-todos-counter',
@@ -12,7 +12,7 @@ export class TodosCounterComponent implements OnInit, IObserver {
   private count: number;
 
   constructor() {
-    todos$.subscribe(this)
+    todosStore.todos$.subscribe(this)
   }
 
   ngOnInit() {

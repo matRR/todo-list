@@ -1,3 +1,4 @@
+import { todosStore } from './../my-observable/app-data';
 import { todos$, IObserver } from 'app/my-observable/app-data';
 import * as _ from 'lodash';
 import { Component, OnInit } from '@angular/core';
@@ -18,7 +19,7 @@ export class TodosComponent implements OnInit, IObserver {
   ngOnInit() {
     // timing nie jest już ważny, możemy się podpiąć też tutaj lub gdziekolwiek indziej,
     // np w jakimś event'cie UI'owym
-    todos$.subscribe(this);
+    todosStore.todos$.subscribe(this);
   }
 
   next(data: Item[]) {

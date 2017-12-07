@@ -1,3 +1,4 @@
+import { todosStore } from './../my-observable/app-data';
 import { Item } from './../shared/item';
 import { Component, OnInit } from '@angular/core';
 import { itemsFeed } from 'app/shared/items-feed';
@@ -18,7 +19,7 @@ export class MyObserverComponent implements OnInit {
   }
 
   ngOnInit() {
-    initTodos(itemsFeed.slice());
+    todosStore.init(itemsFeed.slice());
 
     // simulate server call
     setInterval(() => {

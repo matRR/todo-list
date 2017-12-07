@@ -33,23 +33,23 @@ class SubjectImpl implements ISubject {
   
 }
 
-// private, nie ma export, jednyne, prawdziwe źródło danych
-let todos: Item[] = [];
+class TodosStore {
 
-// prywatny
-const todosSubject = new SubjectImpl();
+  private todos: Item[] = [];
+  private todosSubject = new SubjectImpl();
+  
+  public todos$: IObservable = {
+    subscribe: obs => {
+      this.todosSubject.subscribe(obs);
+      obs.next(this.todos);
+    },
+    unsubscribe: obs => this.todosSubject.unsubscribe(obs)
+  };
+  
+  public init(newTodos: Item[]) {
+    this.todos = _.cloneDeep(newTodos);
+    this.todosSubject.next(this.todos);
+  }
+}
 
-// $ - konwencja nazw, to jest stream, reszta apliakcji widzi ten stream i może się
-// do niego podpiąć i nie musi wiedzieć jak te dane są populowane (websocket, http, etc)
-export let todos$: IObservable = {
-  subscribe: obs => {
-    todosSubject.subscribe(obs);
-    obs.next(todos); // fix for timing issue
-  },
-  unsubscribe: obs => todosSubject.unsubscribe(obs)
-};
-
-export function initTodos(newTodos: Item[]) {
-  todos = _.cloneDeep(newTodos);
-  todosSubject.next(todos);
-};
+export const todosStore = new TodosStore();
