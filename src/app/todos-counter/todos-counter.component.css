@@ -1,0 +1,13 @@
+
+p {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  text-align: center;
+  background-color: rgb(144, 18, 202);
+  color: white;
+  width: 300px;
+}
+
+span {
+  font-weight: bold;
+}

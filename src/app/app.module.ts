@@ -5,11 +5,17 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { BrowserEventsComponent } from './browser-events/browser-events.component';
+import { MyObserverComponent } from './my-observer/my-observer.component';
+import { TodosComponent } from './todos/todos.component';
+import { TodosCounterComponent } from './todos-counter/todos-counter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BrowserEventsComponent
+    BrowserEventsComponent,
+    MyObserverComponent,
+    TodosComponent,
+    TodosCounterComponent
   ],
   imports: [
     BrowserModule,

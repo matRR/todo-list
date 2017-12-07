@@ -1,0 +1,22 @@
+<table>
+  <tr>
+    <th>Completed</th>
+    <th>Todo</th>
+    <th>Duration</th>
+    <th>Actions</th>
+  </tr>
+  <tr *ngFor="let item of items">
+    <td>
+      <input type="checkbox">
+    </td>
+    <td>
+      {{item.text}}
+    </td>
+    <td>
+      {{item.duration}}
+    </td>
+    <td>
+      <button>X</button>
+    </td>
+  </tr>
+</table>
