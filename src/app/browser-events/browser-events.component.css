@@ -1,0 +1,13 @@
+.container {
+  width: 200px;
+  height: 200px;
+  border: 1px solid royalblue;
+  margin: 20px;
+}
+
+.remove-listeners {
+  display: block;
+  margin-top: 40px;
+  font-size: 20px;
+  border: 2px solid red;
+}

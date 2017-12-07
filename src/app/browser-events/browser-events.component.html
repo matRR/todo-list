@@ -1,0 +1,15 @@
+<h1>Browser events</h1>
+
+<div class="container" id="mousemove-container"></div>
+
+<p>Mouse cords: {{cords}}</p>
+
+<button id="click">Click me</button>
+<span>Clicked: {{clicks}}</span>
+
+<button (click)="removeListeners()" class="remove-listeners">Remove listeners</button>
+
+<!-- 
+  Zadanie
+  Dodać przycisk, który przywróci obsługę zdarzeń
+-->

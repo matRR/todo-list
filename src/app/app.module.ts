@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { BrowserEventsComponent } from './browser-events/browser-events.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BrowserEventsComponent
   ],
   imports: [
     BrowserModule,
