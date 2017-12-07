@@ -4,7 +4,7 @@
 
 <div>
   <input #input>
-  <button>Add todo</button>
+  <button (click)="addTodo(input.value)">Add todo</button>
 </div>
 
 <app-todos></app-todos>

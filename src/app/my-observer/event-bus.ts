@@ -1,31 +1,42 @@
 import * as _ from 'lodash';
 
+export const TODOS_AVAILABLE = 'TODOS_AVAILABLE';
+export const ADD_NEW_TODO    = 'ADD_NEW_TODO';
+
 export interface MyObserver {
   notify(data: any);
 }
 
 interface MySubject {
-  registerObserver(obs: MyObserver);
-  unregisterObserver(obs: MyObserver);
-  notifyObservers(data: any);
+  registerObserver(event: string, obs: MyObserver);
+  unregisterObserver(event: string, obs: MyObserver);
+  notifyObservers(event: string, data: any);
 }
 
 class EventBus implements MySubject {
 
-  private observers: MyObserver[] = [];
-
-  registerObserver(obs: MyObserver) {
-    this.observers.push(obs);
+  private observers : {[key: string]: MyObserver[]} = {};
+  
+  registerObserver(event: string, obs: MyObserver) {
+    this.observersForEvent(event).push(obs);
   }
 
-  unregisterObserver(obs: MyObserver) {
-    _.remove(this.observers, ele => ele === obs);
+  unregisterObserver(event: string, obs: MyObserver) {
+    _.remove(this.observersForEvent(event), ele => ele === obs);
   }
 
-  notifyObservers(data: any) {
-    this.observers.forEach((obs: MyObserver) => {
+  notifyObservers(event: string, data: any) {
+    this.observersForEvent(event).forEach((obs: MyObserver) => {
       obs.notify(data);
     });
+  }
+
+  private observersForEvent(event: string): MyObserver[] {
+    const observersPerType = this.observers[event];
+    if (!observersPerType) {
+        this.observers[event] = [];
+    }
+    return this.observers[event];
   }
 
 }
