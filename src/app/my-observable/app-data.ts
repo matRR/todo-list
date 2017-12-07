@@ -42,7 +42,10 @@ const todosSubject = new SubjectImpl();
 // $ - konwencja nazw, to jest stream, reszta apliakcji widzi ten stream i może się
 // do niego podpiąć i nie musi wiedzieć jak te dane są populowane (websocket, http, etc)
 export let todos$: IObservable = {
-  subscribe: obs => todosSubject.subscribe(obs),
+  subscribe: obs => {
+    todosSubject.subscribe(obs);
+    obs.next(todos); // fix for timing issue
+  },
   unsubscribe: obs => todosSubject.unsubscribe(obs)
 };
 
