@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { GlobalEventBus, TODOS_AVAILABLE } from './../my-observer/event-bus';
 import { Component, OnInit } from '@angular/core';
 import { MyObserver, ADD_NEW_TODO } from 'app/my-observer/event-bus';
@@ -34,6 +35,11 @@ export class TodosComponent implements OnInit, MyObserver {
   
   toggleTodo(item: Item) {
     item.completed = !item.completed;
+  }
+
+  // todos-counter przestaje działać poprawnie
+  removeTodo(item: Item) {
+    _.remove(this.items, ele => ele.id === item.id);
   }
 
 }
