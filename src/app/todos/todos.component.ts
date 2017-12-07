@@ -13,7 +13,7 @@ export class TodosComponent implements OnInit, IObserver {
   private items: Item[] = [];
 
   ngOnInit() {
-    todosStore.todos$.subscribe(this);
+    todosStore.subscribe(this);
   }
 
   next(data: Item[]) {

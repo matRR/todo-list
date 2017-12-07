@@ -1,14 +1,15 @@
+import { IObservable } from './app-data';
 import * as _ from 'lodash';
 import { Item } from './../shared/item';
 import { Observable } from 'rxjs/Observable';
 
 export interface IObserver {
-  next(data:any);
+  next(data: any);
 }
 
 export interface IObservable {
   subscribe(obs: IObserver);
-  unsubscribe(obs: IObserver);  
+  unsubscribe(obs: IObserver);
 }
 
 export interface ISubject extends IObserver, IObservable {
@@ -30,22 +31,23 @@ class SubjectImpl implements ISubject {
   unsubscribe(obs: IObserver) {
     _.remove(this.observers, ele => ele === obs);
   }
-  
+
 }
 
-class TodosStore {
+class TodosStore implements IObservable {
 
   private todos: Item[] = [];
   private todosSubject = new SubjectImpl();
-  
-  public todos$: IObservable = {
-    subscribe: obs => {
-      this.todosSubject.subscribe(obs);
-      obs.next(this.todos);
-    },
-    unsubscribe: obs => this.todosSubject.unsubscribe(obs)
-  };
-  
+
+  subscribe(obs: IObserver) {
+    this.todosSubject.subscribe(obs);
+    obs.next(this.todos);
+  }
+
+  unsubscribe(obs: IObserver) {
+    this.todosSubject.unsubscribe(obs);
+  }
+
   init(newTodos: Item[]) {
     this.todos = _.cloneDeep(newTodos);
     this.broadcast();

@@ -12,7 +12,7 @@ export class TodosCounterComponent implements OnInit, IObserver {
   private count: number;
 
   constructor() {
-    todosStore.todos$.subscribe(this)
+    todosStore.subscribe(this)
   }
 
   ngOnInit() {
