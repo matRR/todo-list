@@ -1,7 +1,6 @@
+import { todos$, IObserver } from 'app/my-observable/app-data';
 import * as _ from 'lodash';
-import { GlobalEventBus, TODOS_AVAILABLE } from './../my-observer/event-bus';
 import { Component, OnInit } from '@angular/core';
-import { MyObserver, ADD_NEW_TODO } from 'app/my-observer/event-bus';
 import { Item } from 'app/shared/item';
 
 @Component({
@@ -9,27 +8,20 @@ import { Item } from 'app/shared/item';
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.css']
 })
-export class TodosComponent implements OnInit, MyObserver {
+export class TodosComponent implements OnInit, IObserver {
 
   private items: Item[] = [];
   
   constructor() { 
-    GlobalEventBus.registerObserver(TODOS_AVAILABLE, this);
-    GlobalEventBus.registerObserver(ADD_NEW_TODO, {
-      notify: todoText => {
-        this.items.push({
-          id: Math.random(),
-          text: todoText
-        })
-      }
-    });
   }
 
   ngOnInit() {
-    // dlaczego nie rejestrujemy się tutaj?
+    // timing nie jest już ważny, możemy się podpiąć też tutaj lub gdziekolwiek indziej,
+    // np w jakimś event'cie UI'owym
+    todos$.subscribe(this);
   }
 
-  notify(data: Item[]) {
+  next(data: Item[]) {
     this.items = data;
   }
   
@@ -37,7 +29,6 @@ export class TodosComponent implements OnInit, MyObserver {
     item.completed = !item.completed;
   }
 
-  // todos-counter przestaje działać poprawnie
   removeTodo(item: Item) {
     _.remove(this.items, ele => ele.id === item.id);
   }

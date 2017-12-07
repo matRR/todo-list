@@ -1,8 +1,8 @@
 import { Item } from './../shared/item';
 import { Component, OnInit } from '@angular/core';
-import { GlobalEventBus, ADD_NEW_TODO, TODOS_AVAILABLE } from 'app/my-observer/event-bus';
 import { itemsFeed } from 'app/shared/items-feed';
 import { setInterval } from 'timers';
+import { initTodos } from 'app/my-observable/app-data';
 
 @Component({
   selector: 'app-my-observer',
@@ -11,28 +11,30 @@ import { setInterval } from 'timers';
 })
 export class MyObserverComponent implements OnInit {
 
-  items: Item[] = [];
+  // remove state from the component
+  // items: Item[] = [];
 
   constructor() { 
   }
 
   ngOnInit() {
-    this.items = itemsFeed.slice();
-    GlobalEventBus.notifyObservers(TODOS_AVAILABLE, this.items);
+    initTodos(itemsFeed.slice());
+
     // simulate server call
     setInterval(() => {
       let id = Math.random();
-      this.items.push({
+      const newTodo = {
         id: id,
         text: `Todo from server ${id}`
-      });
-      console.log('Fetching todos from server');
-      GlobalEventBus.notifyObservers(TODOS_AVAILABLE, this.items);
+      };
+
+      // TODO - bring new data from the server
+
     }, 4000);
   }
 
   addTodo(todoText: string) {
-    GlobalEventBus.notifyObservers(ADD_NEW_TODO, todoText);
+    // TODO
   }
 
 }
