@@ -1,25 +1,33 @@
-import { Item } from './../shared/item';
+import { Item } from 'app/shared/item';
 import { Component, OnInit } from '@angular/core';
-import { IObserver, todosStore } from 'app/my-observable/app-data';
+import { todosStore } from 'app/my-observable/app-data';
 
 @Component({
   selector: 'app-todos-counter',
   templateUrl: './todos-counter.component.html',
   styleUrls: ['./todos-counter.component.css']
 })
-export class TodosCounterComponent implements OnInit, IObserver {
+export class TodosCounterComponent implements OnInit {
 
-  private count: number;
-
-  constructor() {
-    todosStore.subscribe(this)
-  }
+  private count: number = 0;
 
   ngOnInit() {
+    todosStore.todos$.subscribe(
+      (data: Item[]) => {
+        this.count = data.length;
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        console.log('completed');
+      }
+    );
   }
 
-  next(data: Item[]) {
-    this.count = data.length;
+  private updateCount(count) {
+    this.count = count;
   }
+
 
 }

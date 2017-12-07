@@ -1,78 +1,41 @@
-import { IObservable } from './app-data';
 import * as _ from 'lodash';
 import { Item } from './../shared/item';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject, Observer } from 'rxjs';
 
-export interface IObserver {
-  next(data: any);
-}
+class TodosStore {
 
-export interface IObservable {
-  subscribe(obs: IObserver);
-  unsubscribe(obs: IObserver);
-}
+  // z BehaviorSubject to nie jest potrzebne
+  // private todos: Item[] = [];
+  // BehaviorSubject zamiast Subject (timming issue, zwykły Subject "nie pamięta" poprzedniej wartosci)
+  private todosSubject = new BehaviorSubject<Item[]>([]);
 
-export interface ISubject extends IObserver, IObservable {
-}
-
-// bardzo podobne do GlobalEventBus
-class SubjectImpl implements ISubject {
-
-  private observers: IObserver[] = [];
-
-  next(data: any) {
-    this.observers.forEach(obs => obs.next(data));
-  }
-
-  subscribe(obs: IObserver) {
-    this.observers.push(obs);
-  }
-
-  unsubscribe(obs: IObserver) {
-    _.remove(this.observers, ele => ele === obs);
-  }
-
-}
-
-class TodosStore implements IObservable {
-
-  private todos: Item[] = [];
-  private todosSubject = new SubjectImpl();
-
-  subscribe(obs: IObserver) {
-    this.todosSubject.subscribe(obs);
-    obs.next(this.todos);
-  }
-
-  unsubscribe(obs: IObserver) {
-    this.todosSubject.unsubscribe(obs);
-  }
+  public todos$: Observable<Item[]> = this.todosSubject.asObservable();
 
   init(newTodos: Item[]) {
-    this.todos = _.cloneDeep(newTodos);
-    this.broadcast();
+    this.todosSubject.next(_.cloneDeep(newTodos));
   }
 
   addTodo(newTodo: Item) {
-    // klonujemy bo nie chcemy mieć referencji do przekazanego obiektu,
-    // tym sposobem zapewnimy że store jest jedynym owner'em danych
-    this.todos.push(_.cloneDeep(newTodo));
-    this.broadcast();
+    const todos = this.cloneTodos();
+    todos.push(_.cloneDeep(newTodo));
+    this.todosSubject.next(todos);
   }
 
   deleteTodo(todo: Item) {
-    _.remove(this.todos, ele => ele.id === todo.id);
-    this.broadcast();
+    const todos = this.cloneTodos();
+    _.remove(todos, ele => ele.id === todo.id);
+    this.todosSubject.next(todos);
   }
 
   toggleTodo(todo: Item) {
-    const todoToToggle = _.find(this.todos, ele => ele.id === todo.id);
+    const todos = this.cloneTodos();
+    const todoToToggle = _.find(todos, ele => ele.id === todo.id);
     todoToToggle.completed = !todoToToggle.completed;
-    this.broadcast();
+    this.todosSubject.next(todos);
   }
 
-  private broadcast() {
-    this.todosSubject.next(_.cloneDeep(this.todos));
+  private cloneTodos() {
+    return _.cloneDeep(this.todosSubject.getValue());
   }
 }
 
