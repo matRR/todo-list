@@ -1,5 +1,4 @@
-import { todosStore } from './../my-observable/app-data';
-import { todos$, IObserver } from 'app/my-observable/app-data';
+import { todosStore, IObserver } from 'app/my-observable/app-data';
 import * as _ from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { Item } from 'app/shared/item';
@@ -12,13 +11,8 @@ import { Item } from 'app/shared/item';
 export class TodosComponent implements OnInit, IObserver {
 
   private items: Item[] = [];
-  
-  constructor() { 
-  }
 
   ngOnInit() {
-    // timing nie jest już ważny, możemy się podpiąć też tutaj lub gdziekolwiek indziej,
-    // np w jakimś event'cie UI'owym
     todosStore.todos$.subscribe(this);
   }
 
@@ -27,11 +21,11 @@ export class TodosComponent implements OnInit, IObserver {
   }
   
   toggleTodo(item: Item) {
-    item.completed = !item.completed;
+    todosStore.toggleTodo(item);
   }
 
   removeTodo(item: Item) {
-    _.remove(this.items, ele => ele.id === item.id);
+    todosStore.deleteTodo(item);
   }
 
 }

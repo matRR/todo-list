@@ -3,7 +3,6 @@ import { Item } from './../shared/item';
 import { Component, OnInit } from '@angular/core';
 import { itemsFeed } from 'app/shared/items-feed';
 import { setInterval } from 'timers';
-import { initTodos } from 'app/my-observable/app-data';
 
 @Component({
   selector: 'app-my-observer',
@@ -29,13 +28,16 @@ export class MyObserverComponent implements OnInit {
         text: `Todo from server ${id}`
       };
 
-      // TODO - bring new data from the server
+      todosStore.addTodo(newTodo);
 
     }, 4000);
   }
 
   addTodo(todoText: string) {
-    // TODO
+    todosStore.addTodo({
+      id: Math.random(),
+      text: todoText
+    });
   }
 
 }

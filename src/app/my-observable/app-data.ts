@@ -46,9 +46,31 @@ class TodosStore {
     unsubscribe: obs => this.todosSubject.unsubscribe(obs)
   };
   
-  public init(newTodos: Item[]) {
+  init(newTodos: Item[]) {
     this.todos = _.cloneDeep(newTodos);
-    this.todosSubject.next(this.todos);
+    this.broadcast();
+  }
+
+  addTodo(newTodo: Item) {
+    // klonujemy bo nie chcemy mieć referencji do przekazanego obiektu,
+    // tym sposobem zapewnimy że store jest jedynym owner'em danych
+    this.todos.push(_.cloneDeep(newTodo));
+    this.broadcast();
+  }
+
+  deleteTodo(todo: Item) {
+    _.remove(this.todos, ele => ele.id === todo.id);
+    this.broadcast();
+  }
+
+  toggleTodo(todo: Item) {
+    const todoToToggle = _.find(this.todos, ele => ele.id === todo.id);
+    todoToToggle.completed = !todoToToggle.completed;
+    this.broadcast();
+  }
+
+  private broadcast() {
+    this.todosSubject.next(_.cloneDeep(this.todos));
   }
 }
 
